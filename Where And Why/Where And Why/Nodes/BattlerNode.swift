@@ -122,7 +122,7 @@ class BattlerNode: SKSpriteNode {
     
     
     func EquipItem(which: Database.ItemTypes) {
-        
+        self.weapon = which
     }
     
     

@@ -11,6 +11,15 @@ import SpriteKit
 
 
 
+
+enum Actions {
+    case None
+    case Fight
+    case Skills
+    case Items
+    case Run
+}
+
 enum BattleStates {
     
     case Init
@@ -24,8 +33,12 @@ enum BattleStates {
     
     // *** This is when you can tap on the screen to select actions and such.
     case PlayerTurn
-    // *** The game automatically makes the enemies each perform an action.
+    // *** This "displays" and executes on the actions you chose
+    case PlayerAct
+    // *** The game calculates the actions of each enemy
     case EnemyTurn
+    // *** The game performs each action one by one.
+    case EnemyAct
     // *** We check if all enemies are dead or if the player is dead. Go to "Win" if enemies dead, go to "Lose" if player is dead.
     case CheckWinLose
     
@@ -67,6 +80,7 @@ class BattleManager {
     var itemsView: SKView!
     var messageView: SKView!
     var statusView: SKView!
+    var canTargetEnemies: Bool = false
     
     
     
@@ -122,6 +136,95 @@ class BattleManager {
     
     
     
+    var selectAction: Actions = .None
+    var selectBattler: BattlerNode! = nil
+    var selectSkill: Database.Skills = .None
+    var selectItem: Database.ItemTypes = .None
+    
+    func Interaction(action: Actions) {
+        if (selectState == .Actions) {
+            selectAction = action
+            
+            switch action {
+            case .None:
+                changeBattleState(.PlayerAct)
+                break
+            case .Fight:
+                changeSelectState(.Enemies)
+                break
+            case .Skills:
+                changeSelectState(.Skills)
+                break
+            case .Items:
+                changeSelectState(.Items)
+                break
+            case .Run:
+                changeBattleState(.PlayerAct)
+                break
+            }
+        }
+        else {
+            changeSelectState(.Actions)
+        }
+    }
+    func Interaction(skill: Database.Skills) {
+        selectSkill = skill
+        //
+        changeSelectState(.Enemies)
+    }
+    func Interaction(item: Database.ItemTypes) {
+        selectItem = item
+        //
+        let thisItem: ItemData = Database.Instance().allItems[selectItem]!
+        if (false) { // thisItem.effectType == .Attack
+            changeSelectState(.Enemies)
+        }
+        else {
+            changeBattleState(.PlayerAct)
+        }
+    }
+    func Interaction(target: BattlerNode) {
+        selectBattler = target
+        //
+        changeBattleState(.PlayerAct)
+    }
+    
+    
+    func PerformAction(who: BattlerNode, action: Actions, target: BattlerNode! = nil, skill: Database.Skills = .None, item: Database.ItemTypes = .None) {
+        switch action {
+        case .None:
+            break
+        case .Fight:
+            if (target != nil) {
+                who.Attack(who: target)
+            }
+            break
+        case .Skills:
+            if (target != nil) {
+                who.Attack(who: target)
+            }
+            break
+        case .Items:
+            if (selectBattler == nil) {
+                selectBattler = player
+            }
+            //
+            selectBattler.UseItem(which: item)
+            break
+        case .Run:
+            // ??? <-- Unimplemented... Eh?? What do we do?!?!
+            EndBattle()
+            break
+        }
+        //
+        //
+        changeBattleState(.EnemyTurn)
+    }
+    
+    
+    
+    
+    
     func doUpdate(_ currentTime: TimeInterval) {
         // *** Initialize right away if its necessary-- Don't even wait.
         if (battleState == .Init) {
@@ -165,6 +268,31 @@ class BattleManager {
             
         case .PlayerTurn:
             // *** We let the menus handle this!
+            break
+        case .PlayerAct:
+            // ??? <-- Animate this or something...
+            
+            if (phaseTime > SEC) {
+                changeBattleState(.EnemyTurn)
+            }
+            break
+        case .EnemyTurn:
+            // ??? <-- Pretend like the game is thinking...
+            
+            if (phaseTime > SEC) {
+                changeBattleState(.EnemyAct)
+            }
+            break
+        case .EnemyAct:
+            // ??? <-- Animate this or something...
+            
+            if (phaseTime > SEC) {
+                changeBattleState(.CheckWinLose)
+            }
+            break
+            
+        case .CheckWinLose:
+            ??? <-- I'm not licked yet!
             break
             
         default:
@@ -233,7 +361,12 @@ class BattleManager {
         case .PlayerTurn:
             changeSelectState(.Actions)
             break
+        case .PlayerAct:
+            PerformAction(who: player, action: selectAction, target: selectBattler, skill: selectSkill, item: selectItem)
+            break
         case .EnemyTurn:
+            break
+        case .EnemyAct:
             break
             
         case .CheckWinLose:
@@ -277,17 +410,56 @@ class BattleManager {
     func updateSelectState(from: SelectStates, to: SelectStates) {
         switch to {
         case .None:
+            // *** Initialize our selections
+            selectAction = .None
+            selectBattler = nil
+            selectSkill = .None
+            selectItem = .None
             
+            actionsView.isHidden = true
+            skillsView.isHidden = true
+            itemsView.isHidden = true
+            messageView.isHidden = true
+            statusView.isHidden = false
+            canTargetEnemies = false
             break
         case .Actions:
-            // *** Player picks an action on the screen.
+            // *** Reset our selections
+            selectAction = .None
+            selectBattler = nil
+            selectSkill = .None
+            selectItem = .None
             
+            actionsView.isHidden = false
+            skillsView.isHidden = true
+            itemsView.isHidden = true
+            messageView.isHidden = true
+            statusView.isHidden = false
+            canTargetEnemies = false
             break
         case .Enemies:
+            actionsView.isHidden = true
+            skillsView.isHidden = true
+            itemsView.isHidden = true
+            messageView.isHidden = true
+            statusView.isHidden = true
+            canTargetEnemies = true
             break
         case .Skills:
+            actionsView.isHidden = true
+            skillsView.isHidden = false
+            itemsView.isHidden = true
+            messageView.isHidden = true
+            statusView.isHidden = true
+            canTargetEnemies = false
             break
         case .Items:
+            actionsView.isHidden = true
+            skillsView.isHidden = true
+            itemsView.isHidden = false
+            messageView.isHidden = true
+            statusView.isHidden = true
+            canTargetEnemies = false
             break
             
         default:

@@ -58,11 +58,12 @@ class Database {
     }
     
     enum Skills: Int {
-        case Bash = 0
-        case Slash = 1
-        case Stab = 2
+        case None
+        case Bash
+        case Slash
+        case Stab
         
-        case FireStab = 3
+        case FireStab
     }
     
     
