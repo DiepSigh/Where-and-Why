@@ -11,40 +11,137 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
+    
+    // Screen width.
+    public var screenWidth: CGFloat {
+        return UIScreen.main.bounds.width
+    }
 
+    // Screen height.
+    public var screenHeight: CGFloat {
+        return UIScreen.main.bounds.height
+    }
+    
+    //Button Positions
+    lazy var X1 = (screenWidth - 320)
+    lazy var X2 = (screenWidth - 160)
+    lazy var Y1 = (screenHeight - 160)
+    lazy var Y2 = (screenHeight - 80)
+    
+    lazy var btnRun = UIButton(frame: CGRect(x: X2, y: Y2, width: 100, height: 50))
+    lazy var btnItems = UIButton(frame: CGRect(x: X1, y: Y2, width: 100, height: 50))
+    lazy var btnSkills = UIButton(frame: CGRect(x: X2, y: Y1, width: 100, height: 50))
+    lazy var btnAttack = UIButton(frame: CGRect(x: X1, y: Y1, width: 100, height: 50))
+    
+    //Bottom Left Button Array
+    //lazy var button: Array<UIButton> = []
+    lazy var button = [UIButton]()
+    
+    lazy var textDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 600, height: 40))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Set up scene
+        let scene = GameScene(size:CGSize(width: 2048, height: 1536))
+        let skView = self.view as! SKView
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .aspectFill
+        skView.presentScene(scene)
         
-        if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
-                // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
-                
-                // Present the scene
-                view.presentScene(scene)
+        //Text Display at top
+        textDisplay.center = CGPoint(x: screenWidth/2, y: 40)
+        textDisplay.textAlignment = .center
+        textDisplay.text = "A Slime has appeared!"
+        textDisplay.backgroundColor = .white
+        self.view.addSubview(textDisplay)
+        
+        let defaultView = SKView()
+        self.view.addSubview(defaultView)
+        //Add buttons
+        btnAttack.backgroundColor = .black
+        btnAttack.setTitle("Attack", for: .normal)
+        //Function to execute when pressed
+        btnAttack.addTarget(self, action: #selector(btnActionAtk), for: .touchUpInside)
+
+        btnSkills.backgroundColor = .black
+        btnSkills.setTitle("Skills", for: .normal)
+        btnSkills.addTarget(self, action: #selector(btnActionSkills), for: .touchUpInside)
+        
+        btnItems.backgroundColor = .black
+        btnItems.setTitle("Items", for: .normal)
+        btnItems.addTarget(self, action: #selector(btnActionItems), for: .touchUpInside)
+        
+        btnRun.backgroundColor = .black
+        btnRun.setTitle("Run", for: .normal)
+        btnRun.addTarget(self, action: #selector(btnActionRun), for: .touchUpInside)
+        
+        //skills, items, stats hp, enemy, text
+        //make a view for each
+        
+        defaultView.isHidden = false
+        defaultView.addSubview(btnAttack)
+        defaultView.addSubview(btnSkills)
+        defaultView.addSubview(btnItems)
+        defaultView.addSubview(btnRun)
+        //Hide Buttons
+        //HideMainButtons()
+        
+        //Build skillsview
+        let skillsView = SKView()
+        self.view.addSubview(skillsView)
+        
+        for _ in 0...6 {
+            let btn = UIButton()
+            button.append(btn)
+        }
+        
+        var temp = 1
+        
+        for i in 1...6 {
+            if i <= 3 {
+                button[i].frame = CGRect(x: (i*90)-60, y: Int(Y1), width: 70,height: 60)
+            }else{
+                button[i].frame = CGRect(x: (temp*90)-60, y: Int(Y2), width: 70,height: 60)
+                temp+=1
             }
-            
-            view.ignoresSiblingOrder = true
-            
-            view.showsFPS = true
-            view.showsNodeCount = true
+            button[i].backgroundColor = .black
+            button[i].setTitle("Test", for: .normal)
+            skillsView.addSubview(button[i])
+            print(i)
         }
+        skillsView.isHidden = false
     }
 
-    override var shouldAutorotate: Bool {
-        return true
+    @objc func btnActionAtk(sender: UIButton!) {
+        print("Pressed")
     }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+    
+    @objc func btnActionSkills(sender: UIButton!) {
+        print("Pressed")
     }
-
-    override var prefersStatusBarHidden: Bool {
-        return true
+    
+    @objc func btnActionItems(sender: UIButton!) {
+        print("Pressed")
     }
+    
+    @objc func btnActionRun(sender: UIButton!) {
+        print("Pressed")
+    }
+    
+    func HideMainButtons(){
+        btnAttack.isHidden = true
+        btnSkills.isHidden = true
+        btnItems.isHidden = true
+        btnRun.isHidden = true
+    }
+    
+    func ShowMainButtons(){
+        btnAttack.isHidden = false
+        btnSkills.isHidden = false
+        btnItems.isHidden = false
+        btnRun.isHidden = false
+    }
+    
 }
