@@ -33,6 +33,12 @@ class GameViewController: UIViewController {
     lazy var btnSkills = UIButton(frame: CGRect(x: X2, y: Y1, width: 100, height: 50))
     lazy var btnAttack = UIButton(frame: CGRect(x: X1, y: Y1, width: 100, height: 50))
     
+    //Bottom Left Button Array
+    //lazy var button: Array<UIButton> = []
+    lazy var button = [UIButton]()
+    
+    lazy var textDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 600, height: 40))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Set up scene
@@ -44,11 +50,19 @@ class GameViewController: UIViewController {
         scene.scaleMode = .aspectFill
         skView.presentScene(scene)
         
-        let skillsView = SKView()
-        self.view.addSubview(skillsView)
+        //Text Display at top
+        textDisplay.center = CGPoint(x: screenWidth/2, y: 40)
+        textDisplay.textAlignment = .center
+        textDisplay.text = "A Slime has appeared!"
+        textDisplay.backgroundColor = .white
+        self.view.addSubview(textDisplay)
+        
+        let defaultView = SKView()
+        self.view.addSubview(defaultView)
         //Add buttons
         btnAttack.backgroundColor = .black
         btnAttack.setTitle("Attack", for: .normal)
+        //Function to execute when pressed
         btnAttack.addTarget(self, action: #selector(btnActionAtk), for: .touchUpInside)
 
         btnSkills.backgroundColor = .black
@@ -63,22 +77,41 @@ class GameViewController: UIViewController {
         btnRun.setTitle("Run", for: .normal)
         btnRun.addTarget(self, action: #selector(btnActionRun), for: .touchUpInside)
         
-        //Add buttons to scene?
-//        self.view.addSubview(btnAttack)
-//        self.view.addSubview(btnSkills)
-//        self.view.addSubview(btnItems)
-//        self.view.addSubview(btnRun)
-        
         //skills, items, stats hp, enemy, text
-        //makea view for each
+        //make a view for each
         
-        skillsView.isHidden = true
-        skillsView.addSubview(btnAttack)
-        skillsView.addSubview(btnSkills)
-        skillsView.addSubview(btnItems)
-        skillsView.addSubview(btnRun)
+        defaultView.isHidden = false
+        defaultView.addSubview(btnAttack)
+        defaultView.addSubview(btnSkills)
+        defaultView.addSubview(btnItems)
+        defaultView.addSubview(btnRun)
         //Hide Buttons
         //HideMainButtons()
+        
+        //Build skillsview
+        let skillsView = SKView()
+        self.view.addSubview(skillsView)
+        
+        for _ in 0...6 {
+            let btn = UIButton()
+            button.append(btn)
+        }
+        
+        var temp = 1
+        
+        for i in 1...6 {
+            if i <= 3 {
+                button[i].frame = CGRect(x: (i*90)-60, y: Int(Y1), width: 70,height: 60)
+            }else{
+                button[i].frame = CGRect(x: (temp*90)-60, y: Int(Y2), width: 70,height: 60)
+                temp+=1
+            }
+            button[i].backgroundColor = .black
+            button[i].setTitle("Test", for: .normal)
+            skillsView.addSubview(button[i])
+            print(i)
+        }
+        skillsView.isHidden = false
     }
 
     @objc func btnActionAtk(sender: UIButton!) {
