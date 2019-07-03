@@ -25,22 +25,6 @@ class GameManager: SKSpriteNode {
     
     // *** Singleton Stuff.
     private static var _instance: GameManager?
-    required init?(coder aDecoder: NSCoder) {
-        // fatalError("init(coder:) has not been implemented")
-        
-        super.init(coder: aDecoder)
-        
-        
-        print("GameManager: Created.")
-        
-        self.battleMngr = nil
-        GameManager._instance = self
-        //
-        self.Initialize()
-        
-        
-        print("GameManager: Initted.")
-    }
     static func Instance() -> GameManager {
         return _instance!
     }
@@ -48,6 +32,20 @@ class GameManager: SKSpriteNode {
     
     
     func Initialize() {
+        
+        
+        
+        print("GameManager: Created.")
+        
+        self.battleMngr = nil
+        GameManager._instance = self
+        
+        
+        print("GameManager: Initted.")
+        
+        
+        
+        
         battleMngr = BattleManager()
         playerData = Database.Instance().heroData!
         
@@ -88,4 +86,10 @@ class GameManager: SKSpriteNode {
         inventory?.AddItem(what: .WindSpear)
     }
     
+}
+
+
+
+
+class SomeObj : SKSpriteNode {
 }

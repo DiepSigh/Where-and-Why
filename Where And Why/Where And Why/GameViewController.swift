@@ -35,6 +35,13 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        var gm = GameManager()
+        gm.Initialize()
+        
+        
+        
         //Set up scene
         let scene = GameScene(size:CGSize(width: 2048, height: 1536))
         let skView = self.view as! SKView
@@ -72,7 +79,7 @@ class GameViewController: UIViewController {
         //skills, items, stats hp, enemy, text
         //makea view for each
         
-        skillsView.isHidden = true
+        skillsView.isHidden = false
         skillsView.addSubview(btnAttack)
         skillsView.addSubview(btnSkills)
         skillsView.addSubview(btnItems)
