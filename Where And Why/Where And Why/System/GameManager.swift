@@ -53,6 +53,8 @@ class GameManager: SKSpriteNode {
         
         inventory = Inventory()
         
+        
+        
         print("GameManager: Initialization complete!")
     }
     

@@ -187,6 +187,11 @@ class Database {
         heroData?.GHP = 5
         heroData?.GATK = 2
         heroData?.GDEF = 2
+        //
+        heroData?.CalculateStats()
+        //
+        // *** Give them some HP
+        heroData?.HP = heroData!.MaxHP
         
         // -------------------------------------------------------------------------------------------
         // *** Set up individual enemy data!
@@ -194,7 +199,7 @@ class Database {
         
         // *** The Slime
         enemy = EnemyData(name: "Slime")
-        enemy.MaxHP = 100
+        enemy.MaxHP = 10
         enemy.ATK = 1
         enemy.DEF = 5
         enemy.LVL = 1
@@ -204,7 +209,7 @@ class Database {
         
         // *** The Wolf
         enemy = EnemyData(name: "Wolf")
-        enemy.MaxHP = 100
+        enemy.MaxHP = 10
         enemy.ATK = 20
         enemy.DEF = 8
         enemy.LVL = 10
@@ -214,7 +219,7 @@ class Database {
         
         // *** The Ninja
         enemy = EnemyData(name: "Ninja")
-        enemy.MaxHP = 100
+        enemy.MaxHP = 10
         enemy.ATK = 30
         enemy.DEF = 20
         enemy.LVL = 20

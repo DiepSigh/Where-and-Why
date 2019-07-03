@@ -25,6 +25,7 @@ enum Elements: Int {
 
 class BattlerNode: SKSpriteNode {
     
+    var battleName = ""
     var MaxHP = 0
     var HP = 0
     
@@ -50,6 +51,8 @@ class BattlerNode: SKSpriteNode {
         let ed: EnemyData = Database.Instance().allEnemies[what]!
         
         
+        self.battleName = ed.characterName
+        //
         self.MaxHP = ed.MaxHP
         self.ATK = ed.ATK
         self.DEF = ed.DEF
@@ -64,6 +67,10 @@ class BattlerNode: SKSpriteNode {
         self.element = Elements(rawValue: Int.random(in: 0...2))! // *** Random number between 0 and 2
     }
     func Setup(what: PlayerData) {
+        
+        
+        self.battleName = what.characterName
+        //
         self.MaxHP = what.MaxHP
         self.ATK = what.ATK
         self.DEF = what.DEF
@@ -130,6 +137,8 @@ class BattlerNode: SKSpriteNode {
     
     
     func Attack(who: BattlerNode) {
+        print("\(self.battleName) attacks \(who.battleName)!")
+        
         var damValue = 0
         damValue = Helper.Max(1, self.ATK - who.DEF)
         // *** Damage is always at least 1
@@ -138,9 +147,12 @@ class BattlerNode: SKSpriteNode {
         damValue = who.checkAttack(howMuch: damValue, whatElement: self.element)
         //
         if (damValue > 0) {
+            print("\(who.battleName) receives \(damValue) damage!")
             who.takeHit(howMuch: damValue)
+            
         }
         else {
+            print("\(who.battleName) dodges the attack!")
             // *** Dealing 0 damage is considered as "missing".
             // ??? <-- Display a "miss"...?
         }

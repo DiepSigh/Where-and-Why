@@ -52,8 +52,8 @@ class PlayerData: ActorData {
     }
     
     func CalculateStats() {
-        self.MaxHP = self.BHP + self.GHP * self.LVL
-        self.ATK = self.BATK + self.GATK * self.LVL
-        self.DEF = self.BDEF + self.GDEF * self.LVL
+        self.MaxHP = self.BHP + self.GHP * (self.LVL-1)
+        self.ATK = self.BATK + self.GATK * (self.LVL-1)
+        self.DEF = self.BDEF + self.GDEF * (self.LVL-1)
     }
 }

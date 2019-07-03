@@ -89,6 +89,16 @@ class BattleManager {
         encounterID = .Nothing
         
         
+        
+        
+        // ??? <-- Placeholder code. Need the real stuff...
+        let someView: SKView? = SKView()
+        actionsView = someView
+        skillsView = someView
+        itemsView = someView
+        messageView = someView
+        statusView = someView
+        
         print("BattleManager: Created and initted.")
     }
     
@@ -130,6 +140,9 @@ class BattleManager {
         //
         self.battleMessage = message
         self.messagePeriod = period
+        
+        
+        print("Message: {" + self.battleMessage + "}")
     }
     
     
@@ -218,7 +231,7 @@ class BattleManager {
         }
         //
         //
-        changeBattleState(.EnemyTurn)
+        // changeBattleState(.EnemyTurn)
     }
     
     
@@ -268,31 +281,115 @@ class BattleManager {
             
         case .PlayerTurn:
             // *** We let the menus handle this!
+            
+            
+            // ??? <-- Placeholder code!
+            if (Inputter.wasTapped) {
+                changeSelectState(.None)
+                
+                changeBattleState(.PlayerAct)
+            }
             break
         case .PlayerAct:
             // ??? <-- Animate this or something...
             
-            if (phaseTime > SEC) {
+            if (CGFloat(phaseTime) > SEC) {
+                
+                print("Attacking!")
+                // ??? <-- DEBUGGING!!!
+                for enemy in enemiesList {
+                    player.Attack(who: enemy)
+                }
+                
                 changeBattleState(.EnemyTurn)
             }
             break
         case .EnemyTurn:
             // ??? <-- Pretend like the game is thinking...
             
-            if (phaseTime > SEC) {
+            if (CGFloat(phaseTime) > SEC) {
                 changeBattleState(.EnemyAct)
             }
             break
         case .EnemyAct:
             // ??? <-- Animate this or something...
             
-            if (phaseTime > SEC) {
+            
+            
+            
+            if (CGFloat(phaseTime) > SEC) {
+                
+                // ??? <-- DEBUGGING!!!
+                for enemy in enemiesList {
+                    if (!enemy.isDead) {
+                        enemy.Attack(who: player)
+                    }
+                }
+                
                 changeBattleState(.CheckWinLose)
             }
             break
             
         case .CheckWinLose:
-            ??? <-- I'm not licked yet!
+            var test: Bool
+            
+            // *** If the hero is dead, winning doesn't matter.
+            if (player.isDead) {
+                changeBattleState(.Lose)
+                break
+            }
+            else {
+                
+                // *** Assume all enemies are dead. If I'm wrong, then start the next turn
+                test = true
+                for enemy in enemiesList {
+                    if (!enemy.isDead) {
+                        test = false
+                    }
+                }
+                
+                if (test) {
+                    changeBattleState(.Win)
+                    break
+                }
+                else {
+                    changeBattleState(.PlayerTurn)
+                }
+            }
+            break
+            
+            
+        case .Win:
+            // ??? <-- Animate this or something...
+            
+            if (CGFloat(phaseTime) > SEC) {
+                changeBattleState(.Rewards)
+            }
+            break
+        case .Lose:
+            
+            break
+            
+            
+        case .Rewards:
+            // ??? <-- Animate this or something...
+            
+            if (CGFloat(phaseTime) > SEC*5) {
+                changeBattleState(.Outro)
+            }
+            break
+            
+            
+        case .Outro:
+            // ??? <-- Animate this or something...
+            
+            if (CGFloat(phaseTime) > SEC*3) {
+                changeBattleState(.End)
+            }
+            break
+            
+            
+        case .End:
             break
             
         default:
@@ -326,8 +423,14 @@ class BattleManager {
             
         case .Start:
             print("BattleManager: Gearing up the hero...")
+            
             // *** Get the player battler ready!
             player = gm.scene?.childNode(withName: "player") as? BattlerNode
+            //
+            if (player == nil) {
+                player = BattlerNode(imageNamed: "player")
+            }
+            //
             player.Setup(what: gm.playerData!)
             
             
@@ -335,11 +438,15 @@ class BattleManager {
             // *** Prepare the list of enemies and get THEM ready!
             enemiesList.removeAll()
             for enemyType in db.allEncounters[self.encounterID]! {
-                let battler: BattlerNode? = gm.scene?.childNode(withName: "enemy\(1+enemiesList.count)") as? BattlerNode
+                var battler: BattlerNode? = gm.scene?.childNode(withName: "enemy\(1+enemiesList.count)") as? BattlerNode
                 //
-                if (battler != nil) {
-                    battler?.Setup(what: enemyType)
+                if (battler == nil) {
+                    battler = BattlerNode(imageNamed: "enemy\(1+enemiesList.count)")
                 }
+                //
+                battler?.Setup(what: enemyType)
+                //
+                enemiesList.append(battler!)
             }
             
             
@@ -359,23 +466,37 @@ class BattleManager {
             break
             
         case .PlayerTurn:
+            Message(message: "Player's Turn", period: Helper.SECOND * 2)
+            
             changeSelectState(.Actions)
             break
         case .PlayerAct:
             PerformAction(who: player, action: selectAction, target: selectBattler, skill: selectSkill, item: selectItem)
             break
         case .EnemyTurn:
+            Message(message: "Enemies' Turns", period: Helper.SECOND * 2)
             break
         case .EnemyAct:
             break
             
         case .CheckWinLose:
+            
+            print("\(player.battleName) HP: \(player.HP)/\(player.MaxHP)")
+            
+            for enemy in enemiesList {
+                print("\(enemy.battleName) HP: \(enemy.HP)/\(enemy.MaxHP)")
+            }
             break
         case .Win:
+            Message(message: "Victory!", period: Helper.SECOND * 2)
             break
         case .Lose:
+            Message(message: "Defeated...", period: Helper.SECOND * 2)
             break
         case .Rewards:
+            Message(message: "Gained X EXP!", period: Helper.SECOND * 2)
+            Message(message: "Earned X Gold!", period: Helper.SECOND * 2)
+            Message(message: "Found X!", period: Helper.SECOND * 2)
             break
         case .Outro:
             break

@@ -13,6 +13,7 @@
 		1106422422C57D850049E772 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106422322C57D850049E772 /* GameManager.swift */; };
 		1106422622C592DC0049E772 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106422522C592DC0049E772 /* ItemData.swift */; };
 		1106422822C59E4F0049E772 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106422722C59E4F0049E772 /* Inventory.swift */; };
+		11156EE622CC18A90030F8C9 /* Inputter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11156EE522CC18A90030F8C9 /* Inputter.swift */; };
 		11D5C36B22C2D9EF00E28A09 /* BattleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D5C36A22C2D9EF00E28A09 /* BattleManager.swift */; };
 		11D5C36D22C2DFCF00E28A09 /* BattlerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D5C36C22C2DFCF00E28A09 /* BattlerNode.swift */; };
 		11D5C36F22C2EE7700E28A09 /* PlayerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D5C36E22C2EE7700E28A09 /* PlayerData.swift */; };
@@ -34,6 +35,7 @@
 		1106422322C57D850049E772 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		1106422522C592DC0049E772 /* ItemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
 		1106422722C59E4F0049E772 /* Inventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
+		11156EE522CC18A90030F8C9 /* Inputter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inputter.swift; sourceTree = "<group>"; };
 		11D5C36A22C2D9EF00E28A09 /* BattleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleManager.swift; sourceTree = "<group>"; };
 		11D5C36C22C2DFCF00E28A09 /* BattlerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattlerNode.swift; sourceTree = "<group>"; };
 		11D5C36E22C2EE7700E28A09 /* PlayerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerData.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				1106422122C57AA10049E772 /* Helper.swift */,
 				1106422322C57D850049E772 /* GameManager.swift */,
 				1106422722C59E4F0049E772 /* Inventory.swift */,
+				11156EE522CC18A90030F8C9 /* Inputter.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -202,6 +205,7 @@
 				951B1F6622C2D0EE0079BF0C /* AppDelegate.swift in Sources */,
 				1106422622C592DC0049E772 /* ItemData.swift in Sources */,
 				1106422022C579400049E772 /* EnemyData.swift in Sources */,
+				11156EE622CC18A90030F8C9 /* Inputter.swift in Sources */,
 				1106422222C57AA10049E772 /* Helper.swift in Sources */,
 				11D5C37122C2EF7300E28A09 /* Database.swift in Sources */,
 				11D5C36D22C2DFCF00E28A09 /* BattlerNode.swift in Sources */,
