@@ -3,6 +3,13 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
         
+        
+        let background = SKSpriteNode(imageNamed: "background")
+        addChild(background)
+        background.anchorPoint = CGPoint.zero
+        background.position = CGPoint.zero
+        
+        
         // GameManager.Instance().scene = self
     }
     
@@ -44,5 +51,4 @@ class GameScene: SKScene {
         // *** This is LAST because of the nature of reading taps
         Inputter.Update()
     }
-    
 }
