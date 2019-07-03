@@ -29,12 +29,12 @@ class Inputter {
         wasTapped = true
         isTapping = true
         //
-        tapLocation = touch.location(in: GameManager.Instance().scene!)
+        tapLocation = touch.location(in: GameManager.Instance().currentScene!)
     }
     static func TapMove(_ touch: UITouch) {
         wasMoved = true
         //
-        tapLocation = touch.location(in: GameManager.Instance().scene!)
+        tapLocation = touch.location(in: GameManager.Instance().currentScene!)
     }
     static func TapEnd(_ touch: UITouch) {
         

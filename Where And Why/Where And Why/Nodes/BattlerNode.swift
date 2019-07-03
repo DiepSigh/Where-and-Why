@@ -137,6 +137,8 @@ class BattlerNode: SKSpriteNode {
     
     
     func Attack(who: BattlerNode) {
+        let bm = GameManager.Instance().battleMngr!
+        
         print("\(self.battleName) attacks \(who.battleName)!")
         
         var damValue = 0
@@ -150,11 +152,14 @@ class BattlerNode: SKSpriteNode {
             print("\(who.battleName) receives \(damValue) damage!")
             who.takeHit(howMuch: damValue)
             
+            bm.Message("\(self.battleName) hits \(who.battleName) for \(damValue) damage!")
         }
         else {
             print("\(who.battleName) dodges the attack!")
             // *** Dealing 0 damage is considered as "missing".
             // ??? <-- Display a "miss"...?
+            
+            bm.Message("\(self.battleName) misses \(who.battleName)!")
         }
     }
     

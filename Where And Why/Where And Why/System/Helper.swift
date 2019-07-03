@@ -63,4 +63,9 @@ class Helper {
     }
     
     
+    static func Lapped(_ time: CGFloat, _ period: CGFloat, _ interval: CGFloat = 1) -> Bool {
+        return (time-interval < period && time >= period)
+    }
+    
+    
 }

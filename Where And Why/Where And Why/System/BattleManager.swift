@@ -82,6 +82,8 @@ class BattleManager {
     var statusView: SKView!
     var canTargetEnemies: Bool = false
     
+    var textBar: UILabel!
+    
     
     
     
@@ -130,19 +132,20 @@ class BattleManager {
     var messageMoment: CGFloat = 0
     var messagePeriod: CGFloat = 0
     func Message() {
-        self.messageMoment = CGFloat(phaseTime)
-        //
-        self.battleMessage = ""
-        self.messagePeriod = 9999
+        Message("")
     }
-    func Message(message: String, period: CGFloat) {
+    func Message(_ message: String, _ period: CGFloat = 99999999) {
         self.messageMoment = CGFloat(phaseTime)
         //
         self.battleMessage = message
         self.messagePeriod = period
+        //
+        textBar.text = self.battleMessage
         
         
-        print("Message: {" + self.battleMessage + "}")
+        if (message != "") {
+            print("Message: {" + self.battleMessage + "}")
+        }
     }
     
     
@@ -272,6 +275,16 @@ class BattleManager {
             }
             
             
+            for n in 0...enemyRolecall.count-1 {
+                // ??? <-- Not yet optimized
+                if (n == 0) {
+                    Message("A \(enemiesList[n].battleName) has appeared!", SEC)
+                }
+                else if (enemyRolecall[n-1] >= 1 && enemyRolecall[n] < 1) {
+                    Message("A \(enemiesList[n].battleName) has appeared!", SEC)
+                }
+            }
+            
             
             
             if (enemyRolecall.last! >= CGFloat(1)) {
@@ -293,14 +306,14 @@ class BattleManager {
         case .PlayerAct:
             // ??? <-- Animate this or something...
             
-            if (CGFloat(phaseTime) > SEC) {
-                
-                print("Attacking!")
+            if (Helper.Lapped(CGFloat(phaseTime), SEC)) {
                 // ??? <-- DEBUGGING!!!
                 for enemy in enemiesList {
                     player.Attack(who: enemy)
                 }
-                
+            }
+            
+            if (CGFloat(phaseTime) > SEC * 2) {
                 changeBattleState(.EnemyTurn)
             }
             break
@@ -317,7 +330,7 @@ class BattleManager {
             
             
             
-            if (CGFloat(phaseTime) > SEC) {
+            if (Helper.Lapped(CGFloat(phaseTime), SEC)) {
                 
                 // ??? <-- DEBUGGING!!!
                 for enemy in enemiesList {
@@ -325,7 +338,9 @@ class BattleManager {
                         enemy.Attack(who: player)
                     }
                 }
-                
+            }
+            
+            if (CGFloat(phaseTime) > SEC * 2) {
                 changeBattleState(.CheckWinLose)
             }
             break
@@ -466,7 +481,7 @@ class BattleManager {
             break
             
         case .PlayerTurn:
-            Message(message: "Player's Turn", period: Helper.SECOND * 2)
+            Message("Player's Turn")
             
             changeSelectState(.Actions)
             break
@@ -474,7 +489,7 @@ class BattleManager {
             PerformAction(who: player, action: selectAction, target: selectBattler, skill: selectSkill, item: selectItem)
             break
         case .EnemyTurn:
-            Message(message: "Enemies' Turns", period: Helper.SECOND * 2)
+            Message("Enemies' Turns")
             break
         case .EnemyAct:
             break
@@ -488,15 +503,15 @@ class BattleManager {
             }
             break
         case .Win:
-            Message(message: "Victory!", period: Helper.SECOND * 2)
+            Message("Victory!")
             break
         case .Lose:
-            Message(message: "Defeated...", period: Helper.SECOND * 2)
+            Message("Defeated...")
             break
         case .Rewards:
-            Message(message: "Gained X EXP!", period: Helper.SECOND * 2)
-            Message(message: "Earned X Gold!", period: Helper.SECOND * 2)
-            Message(message: "Found X!", period: Helper.SECOND * 2)
+            Message("Gained X EXP!", Helper.SECOND * 2)
+            Message("Earned X Gold!", Helper.SECOND * 2)
+            Message("Found X!", Helper.SECOND * 2)
             break
         case .Outro:
             break

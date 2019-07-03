@@ -17,7 +17,7 @@ class GameManager: SKSpriteNode {
     
     
     // var scene: SKScene?
-    
+    var currentScene: SKScene?
     
     var playerData: PlayerData?
     var inventory: Inventory?
