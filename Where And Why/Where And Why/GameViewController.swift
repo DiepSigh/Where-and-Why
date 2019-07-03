@@ -42,6 +42,15 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        let gm = GameManager()
+        gm.Initialize()
+        //
+        let bm: BattleManager = gm.battleMngr
+        
+        
+        
         //Set up scene
         let scene = GameScene(size:CGSize(width: 2048, height: 1536))
         let skView = self.view as! SKView
@@ -54,7 +63,7 @@ class GameViewController: UIViewController {
         //Text Display at top
         textDisplay.center = CGPoint(x: screenWidth/2, y: 40)
         textDisplay.textAlignment = .center
-        textDisplay.text = "A Slime has appeared!"
+        textDisplay.text = ""
         textDisplay.backgroundColor = .white
         self.view.addSubview(textDisplay)
         
@@ -94,6 +103,20 @@ class GameViewController: UIViewController {
             button.append(btn)
         }
         
+        
+        
+        
+        
+        skillsView.isHidden = false
+        skillsView.addSubview(btnAttack)
+        skillsView.addSubview(btnSkills)
+        skillsView.addSubview(btnItems)
+        skillsView.addSubview(btnRun)
+        //Hide Buttons
+        //HideMainButtons()
+
+        
+        
         //Buttons
         var temp = 1
         for i in 1...6 {
@@ -109,6 +132,14 @@ class GameViewController: UIViewController {
             print(i)
         }
         skillsView.isHidden = false
+        
+        
+        
+        // *** Get View ids
+        gm.currentScene = scene
+        
+        bm.textBar = textDisplay
+        bm.actionsView = skillsView
     }
     
     //Button Functions
