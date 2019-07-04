@@ -75,26 +75,31 @@ class GameViewController: UIViewController {
         btnAttack.backgroundColor = .black
         btnAttack.setTitle("Attack", for: .normal)
         //Function to execute when pressed
-        //btnAttack.addTarget(self, action: #selector(btnActionAtk), for: .touchUpInside)
+        btnAttack.addTarget(self, action: #selector(btnActionAtk), for: .touchUpInside)
 
         btnSkills.backgroundColor = .black
         btnSkills.setTitle("Skills", for: .normal)
-        //btnSkills.addTarget(self, action: #selector(btnActionSkills), for: .touchUpInside)
+        btnSkills.addTarget(self, action: #selector(btnActionSkills), for: .touchUpInside)
         
         btnItems.backgroundColor = .black
         btnItems.setTitle("Items", for: .normal)
-        //btnItems.addTarget(self, action: #selector(btnActionItems), for: .touchUpInside)
+        btnItems.addTarget(self, action: #selector(btnActionItems), for: .touchUpInside)
         
         btnRun.backgroundColor = .black
         btnRun.setTitle("Run", for: .normal)
-        //btnRun.addTarget(self, action: #selector(btnActionRun), for: .touchUpInside)
+        btnRun.addTarget(self, action: #selector(btnActionRun), for: .touchUpInside)
 
         //Add buttons to view
-        defaultView.isHidden = false
-        defaultView.addSubview(btnAttack)
-        defaultView.addSubview(btnSkills)
-        defaultView.addSubview(btnItems)
-        defaultView.addSubview(btnRun)
+//        defaultView.isHidden = false
+//        defaultView.addSubview(btnAttack)
+//        defaultView.addSubview(btnSkills)
+//        defaultView.addSubview(btnItems)
+//        defaultView.addSubview(btnRun)
+        
+        self.view.addSubview(btnAttack)
+        self.view.addSubview(btnSkills)
+        self.view.addSubview(btnItems)
+        self.view.addSubview(btnRun)
         
         //SKILLS VIEW
         let skillsView = SKView()
@@ -122,7 +127,6 @@ class GameViewController: UIViewController {
         
         //STATS VIEW
         //let statsView = SKView()
-        
         statsDisplay.center = CGPoint(x: screenWidth/2, y: screenHeight - 180)
         statsDisplay.textAlignment = .left
         //Get HP
@@ -148,11 +152,37 @@ class GameViewController: UIViewController {
             self.view.addSubview(label[i])
         }
         
+        
         // *** Get View ids
         gm.currentScene = scene
         
         bm.textBar = textDisplay
-        bm.actionsView = skillsView
+        bm.actionsView = defaultView
+        bm.skillsView = skillsView
+    }
+    
+    @objc func btnActionAtk(sender: UIButton!) {
+        print("Pressed Attack")
+        let gm = GameManager.Instance()
+        gm.battleMngr.Interaction(action: .Fight)
+    }
+    
+    @objc func btnActionSkills(sender: UIButton!) {
+        print("Pressed Skills")
+        let gm = GameManager.Instance()
+        gm.battleMngr.Interaction(action: .Skills)
+    }
+    
+    @objc func btnActionItems(sender: UIButton!) {
+        print("Pressed Items")
+        let gm = GameManager.Instance()
+        gm.battleMngr.Interaction(action: .Items)
+    }
+    
+    @objc func btnActionRun(sender: UIButton!) {
+        print("Pressed Run")
+        let gm = GameManager.Instance()
+        gm.battleMngr.Interaction(action: .Run)
     }
     
 }

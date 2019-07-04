@@ -297,11 +297,11 @@ class BattleManager {
             
             
             // ??? <-- Placeholder code!
-            if (Inputter.wasTapped) {
-                changeSelectState(.None)
-                
-                changeBattleState(.PlayerAct)
-            }
+//            if (Inputter.wasTapped) {
+//                changeSelectState(.None)
+//
+//                changeBattleState(.PlayerAct)
+//            }
             break
         case .PlayerAct:
             // ??? <-- Animate this or something...
