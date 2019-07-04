@@ -1,14 +1,27 @@
 import SpriteKit
 class GameScene: SKScene {
+    
+    
+    func transitionToScene(level: String) {
+        guard let newScene = SKScene(fileNamed: level) as? GameScene else {
+            fatalError("Level: {\(level)} not found")
+        }
+        
+        
+        view?.presentScene(newScene, transition: SKTransition.flipVertical(withDuration: 0.5))
+    }
+    
+    
+    
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
         
-        
+        /*
         let background = SKSpriteNode(imageNamed: "background")
         addChild(background)
         background.anchorPoint = CGPoint.zero
         background.position = CGPoint.zero
-        
+        */
         
         // GameManager.Instance().scene = self
     }

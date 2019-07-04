@@ -12,6 +12,12 @@ import GameplayKit
 
 class GameViewController: UIViewController {
     
+    // ===========================================================================
+    
+    
+    
+    
+    
     // Screen width.
     public var screenWidth: CGFloat {
         return UIScreen.main.bounds.width
@@ -40,12 +46,39 @@ class GameViewController: UIViewController {
     //Top Text Display
     lazy var textDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 600, height: 40))
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
         let gm = GameManager()
         gm.Initialize()
+        
+        
+        if let view = self.view as! SKView? {
+            // Load the SKScene from 'GameScene.sks'
+            if let scene = SKScene(fileNamed: "World_Test") {
+                // Set the scale mode to scale to fit the window
+                scene.scaleMode = .aspectFit // .resizeFill
+                
+                // Present the scene
+                view.presentScene(scene)
+                
+                gm.currentScene = scene
+            }
+            
+            view.ignoresSiblingOrder = true
+            
+            view.showsFPS = true
+            view.showsNodeCount = true
+            view.showsPhysics = true
+            
+            gm.worldMngr.Room_Start()
+            return
+        }
+        
+        
         //
         let bm: BattleManager = gm.battleMngr
         
