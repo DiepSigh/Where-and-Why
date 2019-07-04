@@ -3,12 +3,16 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
         
-        
-        let background = SKSpriteNode(imageNamed: "background")
-        addChild(background)
+        let background = SKSpriteNode(imageNamed: "plains")
+        let screenSize : CGRect = UIScreen.main.bounds
+        background.size.width = screenSize.width * 3
+        background.size.height = screenSize.height * 3
+        //background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.anchorPoint = CGPoint.zero
-        background.position = CGPoint.zero
+        background.zPosition = -1
+        addChild(background)
         
+//        background.position = CGPoint.zero
         
         // GameManager.Instance().scene = self
     }
