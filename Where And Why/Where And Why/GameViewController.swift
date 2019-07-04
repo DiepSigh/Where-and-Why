@@ -37,10 +37,13 @@ class GameViewController: UIViewController {
     //lazy var button: Array<UIButton> = []
     lazy var button = [UIButton]()
     
+    //Enemy Stats Array
+    lazy var label = [UILabel]()
+    
     //Top Text Display
     lazy var textDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 600, height: 40))
     //Stats Display Bottom
-    lazy var statsDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 40))
+    lazy var statsDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,19 +117,36 @@ class GameViewController: UIViewController {
             button[i].backgroundColor = .black
             button[i].setTitle("Test", for: .normal)
             skillsView.addSubview(button[i])
-            print(i)
         }
         skillsView.isHidden = false
         
         //STATS VIEW
-        let statsView = SKView()
-        self.view.addSubview(statsView)
+        //let statsView = SKView()
         
-        statsDisplay.center = CGPoint(x: screenWidth/2, y: screenHeight - 50)
-        statsDisplay.textAlignment = .center
+        statsDisplay.center = CGPoint(x: screenWidth/2, y: screenHeight - 180)
+        statsDisplay.textAlignment = .left
         //Get HP
-        statsDisplay.text = "HP: "
+        statsDisplay.text = " Player HP: 5"
         statsDisplay.backgroundColor = .white
+        //statsView.addSubview(statsDisplay)
+        self.view.addSubview(statsDisplay)
+        //statsView.isHidden = false
+        
+        //Number of enemies
+        for _ in 0...4 {
+            let lbl = UILabel()
+            label.append(lbl)
+        }
+        
+        for i in 1...4 {
+            label[i].frame = CGRect(x: 0, y: 0, width: 200, height:40)
+            label[i].center = CGPoint(x: screenWidth/2, y: screenHeight - (135))
+            label[i].textAlignment = .left
+            label[i].backgroundColor = .white
+            //Get Slime HP
+            label[i].text = " Slime HP: 5"
+            self.view.addSubview(label[i])
+        }
         
         // *** Get View ids
         gm.currentScene = scene
