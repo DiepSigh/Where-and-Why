@@ -126,6 +126,7 @@ class BattleManager {
     }
     
     
+    var controller: GameViewController!
     
     
     var battleMessage: String = ""
@@ -525,6 +526,11 @@ class BattleManager {
             
         default:
             break
+        }
+        
+        
+        if player != nil {
+            controller.updateUI()
         }
     }
     // ---------------------------------------------------------

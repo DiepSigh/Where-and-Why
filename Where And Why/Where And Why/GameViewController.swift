@@ -155,14 +155,14 @@ class GameViewController: UIViewController {
         //itemsView.isHidden = false
         
         // Labels Middle
-//        for i in 0...label.count-1 {
-//            label[i].frame = CGRect(x: 0, y: 0, width: 200, height:20)
-//            label[i].center = CGPoint(x: screenWidth/2, y: screenHeight - (140))
-//            label[i].textAlignment = .left
-//            label[i].backgroundColor = .white
-//            //Get Slime HP
-//            label[i].text = " - "
-//        }
+        for i in 0...label.count-1 {
+            label[i].frame = CGRect(x: 0, y: 0, width: 200, height:20)
+            label[i].center = CGPoint(x: screenWidth/2, y: screenHeight - (140)+(CGFloat(20*i)))
+            label[i].textAlignment = .left
+            label[i].backgroundColor = .white
+            //Get Slime HP
+            label[i].text = " - "
+        }
         
         //Set up scene
         let scene = GameScene(size:CGSize(width: 2048, height: 1536))
@@ -205,6 +205,8 @@ class GameViewController: UIViewController {
         bm.skillsView = skillsView
         bm.itemsView = itemsView
 
+        
+        bm.controller = self
     }
     
     @objc func btnActionAtk(sender: UIButton!) {
@@ -212,7 +214,6 @@ class GameViewController: UIViewController {
         let gm = GameManager.Instance()
         //gm.battleMngr.Interaction(action: .Fight)
         gm.battleMngr.changeBattleState(.PlayerAct)
-        updateUI()
     }
     
     @objc func btnActionSkills(sender: UIButton!) {
@@ -233,13 +234,31 @@ class GameViewController: UIViewController {
         gm.battleMngr.Interaction(action: .Run)
     }
     
+    
+    @objc func btnPressedSkill(sender: UIButton!) {
+        // we'd check "sender" to find out what its "index" is
+        
+        // GameManager.Instance().battleMngr.Interaction(skill: Database.Skills.Slash)
+    }
+    
     func updateUI(){
         let gm = GameManager.Instance()
+        let db = Database.Instance()
+        //
+        let bm = gm.battleMngr
+        
+        
         statsDisplay.text = " Player HP: " + String(gm.battleMngr.player.HP) + "/" + String(gm.battleMngr.player.MaxHP)
         //Get number of enemies and type of enemy
-//        for enemy in gm.battleMngr.enemiesList {
-//        label[1].text = " " + gm.battleMngr.enemiesList[0].battleName + " HP: " + String(enemy.HP)
-//        }
+        for n in 0...gm.battleMngr.enemiesList.count-1 {
+            let enemy = gm.battleMngr.enemiesList[n]
+        label[n].text = " " + enemy.battleName + " HP: " + String(enemy.HP) + "/" + String(enemy.MaxHP)
+        }
+        
+        let item: ItemData = db.allItems[bm!.player.weapon]!
+        for n in 0...item.skillList.count-1 {
+            button[n].setTitle("\(item.skillList[n])", for: .normal)
+        }
     }
     
 }
