@@ -1,5 +1,8 @@
 import SpriteKit
 class GameScene: SKScene {
+    
+    let player = SKSpriteNode(imageNamed: "player_01")
+    
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
         
@@ -14,6 +17,12 @@ class GameScene: SKScene {
 //        background.position = CGPoint.zero
         
         // GameManager.Instance().scene = self
+        
+        player.position = CGPoint(x: 1700, y: 800)
+        player.zPosition = 100
+        player.size.width = player.size.width * 8
+        player.size.height = player.size.height * 8
+        addChild(player)
     }
     
     

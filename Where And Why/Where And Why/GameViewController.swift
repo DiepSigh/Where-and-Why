@@ -51,7 +51,7 @@ class GameViewController: UIViewController {
     //Top Text Display
     lazy var textDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 600, height: 40))
     //Stats Display Bottom
-    lazy var statsDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
+    lazy var statsDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 20))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,7 +113,7 @@ class GameViewController: UIViewController {
             //
             statusView.addSubview(lbl)
         }
-        let test = GameManager.Instance()
+        //let test = GameManager.Instance()
         statsDisplay.center = CGPoint(x: screenWidth/2, y: screenHeight - 180)
         statsDisplay.textAlignment = .left
         //Get HP
@@ -155,14 +155,14 @@ class GameViewController: UIViewController {
         //itemsView.isHidden = false
         
         // Labels Middle
-        for i in 0...label.count-1 {
-            label[i].frame = CGRect(x: 0, y: 0, width: 200, height:40)
-            label[i].center = CGPoint(x: screenWidth/2, y: screenHeight - (135))
-            label[i].textAlignment = .left
-            label[i].backgroundColor = .white
-            //Get Slime HP
-            label[i].text = " - "
-        }
+//        for i in 0...label.count-1 {
+//            label[i].frame = CGRect(x: 0, y: 0, width: 200, height:20)
+//            label[i].center = CGPoint(x: screenWidth/2, y: screenHeight - (140))
+//            label[i].textAlignment = .left
+//            label[i].backgroundColor = .white
+//            //Get Slime HP
+//            label[i].text = " - "
+//        }
         
         //Set up scene
         let scene = GameScene(size:CGSize(width: 2048, height: 1536))

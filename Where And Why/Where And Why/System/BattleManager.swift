@@ -593,7 +593,6 @@ class BattleManager {
             actionsView.isHidden = false
             skillsView.isHidden = true
             itemsView.isHidden = false
-            print("test")
             messageView.isHidden = true
             statusView.isHidden = true
             canTargetEnemies = false
