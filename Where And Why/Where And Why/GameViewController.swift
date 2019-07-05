@@ -12,6 +12,23 @@ import GameplayKit
 
 class GameViewController: UIViewController {
     
+    /*
+     GameView ~ everything on screen
+     StatusView
+     PlayerHPBar
+     Enemy1HPBar
+     Enemy2HPBar
+     Enemy3HPBar
+     Enemy4HPBar
+     ActionsView
+     fightButton
+     skillButton
+     itemButton
+     runButton
+     SkillsView
+     
+     */
+    
     // Screen width.
     public var screenWidth: CGFloat {
         return UIScreen.main.bounds.width
@@ -22,10 +39,11 @@ class GameViewController: UIViewController {
         return UIScreen.main.bounds.height
     }
     
-    
     //Bottom Left Button Array
-    //lazy var button: Array<UIButton> = []
+    //Skills
     lazy var button = [UIButton]()
+    //Items
+    lazy var button2 = [UIButton]()
     
     //Enemy Stats Array
     lazy var label = [UILabel]()
@@ -42,66 +60,52 @@ class GameViewController: UIViewController {
         gm.Initialize()
         //
         let bm: BattleManager = gm.battleMngr
-        
-        
-        
-        /*
-         GameView ~ everything on screen
-            StatusView
-                PlayerHPBar
-                Enemy1HPBar
-                Enemy2HPBar
-                Enemy3HPBar
-                Enemy4HPBar
-            ActionsView
-                fightButton
-                skillButton
-                itemButton
-                runButton
-            SkillsView
-         
- */
-        
-        
+    
         //DefaultView Button Positions
         let X1 = 0
         let X2 = 140
         let Y1 = 0
         let Y2 = 80
         //DefaultView Buttons
-        var btnRun = UIButton(frame: CGRect(x: X2, y: Y2, width: 100, height: 60))
-        var btnItems = UIButton(frame: CGRect(x: X1, y: Y2, width: 100, height: 60))
-        var btnSkills = UIButton(frame: CGRect(x: X2, y: Y1, width: 100, height: 60))
-        var btnAttack = UIButton(frame: CGRect(x: X1, y: Y1, width: 100, height: 60))
-        
-        
+        let btnRun = UIButton(frame: CGRect(x: X2, y: Y2, width: 100, height: 60))
+        let btnItems = UIButton(frame: CGRect(x: X1, y: Y2, width: 100, height: 60))
+        let btnSkills = UIButton(frame: CGRect(x: X2, y: Y1, width: 100, height: 60))
+        let btnAttack = UIButton(frame: CGRect(x: X1, y: Y1, width: 100, height: 60))
         
         let gameView = self.view as! SKView
         let messageView = BattleView()
         let statusView = BattleView()
+//      defaultView.frame = CGRect(x:0,y:0, width:self.view.frame.size.width,                 height:self.view.frame.size.height)
         let defaultView = BattleView(frame: CGRect(x: screenWidth - 300, y: screenHeight - 160, width: 140+100, height: 80+60))
-        let skillsView = BattleView()
+        let skillsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140))
+        let itemsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140))
         //
         gameView.addSubview(messageView)
         gameView.addSubview(statusView)
-        gameView.addSubview(skillsView)
         gameView.addSubview(defaultView)
+        gameView.addSubview(skillsView)
+        gameView.addSubview(itemsView)
         //
         messageView.addSubview(textDisplay)
         //
-        defaultView.backgroundColor = UIColor.red
         defaultView.addSubview(btnAttack)
         defaultView.addSubview(btnSkills)
         defaultView.addSubview(btnItems)
         defaultView.addSubview(btnRun)
-        //
+        //Skills
         for _ in 0...5 {
             let btn = UIButton()
             button.append(btn)
             //
             skillsView.addSubview(btn)
         }
-        //
+        //Items
+        for _ in 0...5 {
+            let btn = UIButton()
+            button2.append(btn)
+            //
+            itemsView.addSubview(btn)
+        }
         statusView.addSubview(statsDisplay)
         for _ in 0...3 {
             let lbl = UILabel()
@@ -110,15 +114,11 @@ class GameViewController: UIViewController {
             statusView.addSubview(lbl)
         }
         
-        
-        
-        
         statsDisplay.center = CGPoint(x: screenWidth/2, y: screenHeight - 180)
         statsDisplay.textAlignment = .left
         //Get HP
         statsDisplay.text = " Player HP: 5"
         statsDisplay.backgroundColor = .white
-        
         
         //Text Display at top
         textDisplay.center = CGPoint(x: screenWidth/2, y: 40)
@@ -126,22 +126,35 @@ class GameViewController: UIViewController {
         textDisplay.text = ""
         textDisplay.backgroundColor = .white
         
-        //Buttons
+        //Buttons Bottom Left Skills
         var temp = 1
         for i in 0...button.count-1 {
-            if i <= 3 {
-                button[i].frame = CGRect(x: (i*90)-50, y: Int(Y1), width: 60,height: 60)
+            if i < 3 {
+                button[i].frame = CGRect(x: ((i+1)*90)-50, y: Int(Y1), width: 60,height: 60)
             }else{
                 button[i].frame = CGRect(x: (temp*90)-50, y: Int(Y2), width: 60,height: 60)
                 temp+=1
             }
             button[i].backgroundColor = .black
-            button[i].setTitle("Test", for: .normal)
+            button[i].setTitle("-", for: .normal)
         }
-        skillsView.isHidden = false
+        //skillsView.isHidden = true
         
+        //Items
+        temp = 1
+        for i in 0...button2.count-1 {
+            if i < 3 {
+                button2[i].frame = CGRect(x: ((i+1)*90)-50, y: Int(Y1), width: 60,height: 60)
+            }else{
+                button2[i].frame = CGRect(x: (temp*90)-50, y: Int(Y2), width: 60,height: 60)
+                temp+=1
+            }
+            button2[i].backgroundColor = .black
+            button2[i].setTitle("o", for: .normal)
+        }
+        //itemsView.isHidden = false
         
-        // Labels
+        // Labels Middle
         for i in 0...label.count-1 {
             label[i].frame = CGRect(x: 0, y: 0, width: 200, height:40)
             label[i].center = CGPoint(x: screenWidth/2, y: screenHeight - (135))
@@ -159,7 +172,7 @@ class GameViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
         // skView.ignoresSiblingOrder = true
-        //
+        
         skView.presentScene(scene)
         
         //DEFAULT VIEW
@@ -183,17 +196,15 @@ class GameViewController: UIViewController {
         btnRun.setTitle("Run", for: .normal)
         btnRun.addTarget(self, action: #selector(btnActionRun), for: .touchUpInside)
 
-        
-        
-        
         // *** Get View ids
         gm.currentScene = scene
         
         bm.textBar = textDisplay
-        /*
+
         bm.actionsView = defaultView
         bm.skillsView = skillsView
- */
+        bm.itemsView = itemsView
+
     }
     
     @objc func btnActionAtk(sender: UIButton!) {
