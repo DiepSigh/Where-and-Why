@@ -12,6 +12,23 @@ import GameplayKit
 
 class GameViewController: UIViewController {
     
+    /*
+     GameView ~ everything on screen
+     StatusView
+     PlayerHPBar
+     Enemy1HPBar
+     Enemy2HPBar
+     Enemy3HPBar
+     Enemy4HPBar
+     ActionsView
+     fightButton
+     skillButton
+     itemButton
+     runButton
+     SkillsView
+     
+     */
+    
     // Screen width.
     public var screenWidth: CGFloat {
         return UIScreen.main.bounds.width
@@ -22,110 +39,207 @@ class GameViewController: UIViewController {
         return UIScreen.main.bounds.height
     }
     
-    //DefaultView Button Positions
-    lazy var X1 = (screenWidth - 320)
-    lazy var X2 = (screenWidth - 160)
-    lazy var Y1 = (screenHeight - 160)
-    lazy var Y2 = (screenHeight - 80)
-    //DefaultView Buttons
-    lazy var btnRun = UIButton(frame: CGRect(x: X2, y: Y2, width: 100, height: 50))
-    lazy var btnItems = UIButton(frame: CGRect(x: X1, y: Y2, width: 100, height: 50))
-    lazy var btnSkills = UIButton(frame: CGRect(x: X2, y: Y1, width: 100, height: 50))
-    lazy var btnAttack = UIButton(frame: CGRect(x: X1, y: Y1, width: 100, height: 50))
-    
     //Bottom Left Button Array
-    //lazy var button: Array<UIButton> = []
+    //Skills
     lazy var button = [UIButton]()
+    //Items
+    lazy var button2 = [UIButton]()
+    
+    //Enemy Stats Array
+    lazy var label = [UILabel]()
     
     //Top Text Display
     lazy var textDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 600, height: 40))
+    //Stats Display Bottom
+    lazy var statsDisplay = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Set up scene
-        let scene = GameScene(size:CGSize(width: 2048, height: 1536))
-        let skView = self.view as! SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-        skView.ignoresSiblingOrder = true
-        scene.scaleMode = .aspectFill
-        skView.presentScene(scene)
         
-        //Text Display at top
-        textDisplay.center = CGPoint(x: screenWidth/2, y: 40)
-        textDisplay.textAlignment = .center
-        textDisplay.text = "A Slime has appeared!"
-        textDisplay.backgroundColor = .white
-        self.view.addSubview(textDisplay)
+        let gm = GameManager()
+        gm.Initialize()
+        //
+        let bm: BattleManager = gm.battleMngr
+    
+        //DefaultView Button Positions
+        let X1 = 0
+        let X2 = 140
+        let Y1 = 0
+        let Y2 = 80
+        //DefaultView Buttons
+        let btnRun = UIButton(frame: CGRect(x: X2, y: Y2, width: 100, height: 60))
+        let btnItems = UIButton(frame: CGRect(x: X1, y: Y2, width: 100, height: 60))
+        let btnSkills = UIButton(frame: CGRect(x: X2, y: Y1, width: 100, height: 60))
+        let btnAttack = UIButton(frame: CGRect(x: X1, y: Y1, width: 100, height: 60))
         
-        //DefaultView
-        let defaultView = SKView()
-        self.view.addSubview(defaultView)
-        btnAttack.backgroundColor = .black
-        btnAttack.setTitle("Attack", for: .normal)
-        //Function to execute when pressed
-        btnAttack.addTarget(self, action: #selector(btnActionAtk), for: .touchUpInside)
-
-        btnSkills.backgroundColor = .black
-        btnSkills.setTitle("Skills", for: .normal)
-        btnSkills.addTarget(self, action: #selector(btnActionSkills), for: .touchUpInside)
-        
-        btnItems.backgroundColor = .black
-        btnItems.setTitle("Items", for: .normal)
-        btnItems.addTarget(self, action: #selector(btnActionItems), for: .touchUpInside)
-        
-        btnRun.backgroundColor = .black
-        btnRun.setTitle("Run", for: .normal)
-        btnRun.addTarget(self, action: #selector(btnActionRun), for: .touchUpInside)
-
-        //Add buttons to view
-        defaultView.isHidden = false
+        let gameView = self.view as! SKView
+        let messageView = BattleView()
+        let statusView = BattleView()
+//      defaultView.frame = CGRect(x:0,y:0, width:self.view.frame.size.width,                 height:self.view.frame.size.height)
+        let defaultView = BattleView(frame: CGRect(x: screenWidth - 300, y: screenHeight - 160, width: 140+100, height: 80+60))
+        let skillsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140))
+        let itemsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140))
+        //
+        gameView.addSubview(messageView)
+        gameView.addSubview(statusView)
+        gameView.addSubview(defaultView)
+        gameView.addSubview(skillsView)
+        gameView.addSubview(itemsView)
+        //
+        messageView.addSubview(textDisplay)
+        //
         defaultView.addSubview(btnAttack)
         defaultView.addSubview(btnSkills)
         defaultView.addSubview(btnItems)
         defaultView.addSubview(btnRun)
-        
-        //Build skillsview
-        let skillsView = SKView()
-        self.view.addSubview(skillsView)
-        
-        for _ in 0...6 {
+        //Skills
+        for _ in 0...5 {
             let btn = UIButton()
             button.append(btn)
+            //
+            skillsView.addSubview(btn)
         }
+        //Items
+        for _ in 0...5 {
+            let btn = UIButton()
+            button2.append(btn)
+            //
+            itemsView.addSubview(btn)
+        }
+        statusView.addSubview(statsDisplay)
+        for _ in 0...3 {
+            let lbl = UILabel()
+            label.append(lbl)
+            //
+            statusView.addSubview(lbl)
+        }
+        let test = GameManager.Instance()
+        statsDisplay.center = CGPoint(x: screenWidth/2, y: screenHeight - 180)
+        statsDisplay.textAlignment = .left
+        //Get HP
+        statsDisplay.text = " Player HP: "
+        statsDisplay.backgroundColor = .white
         
-        //Buttons
+        //Text Display at top
+        textDisplay.center = CGPoint(x: screenWidth/2, y: 40)
+        textDisplay.textAlignment = .center
+        textDisplay.text = ""
+        textDisplay.backgroundColor = .white
+        
+        //Buttons Bottom Left Skills
         var temp = 1
-        for i in 1...6 {
-            if i <= 3 {
-                button[i].frame = CGRect(x: (i*90)-60, y: Int(Y1), width: 70,height: 60)
+        for i in 0...button.count-1 {
+            if i < 3 {
+                button[i].frame = CGRect(x: ((i+1)*90)-50, y: Int(Y1), width: 60,height: 60)
             }else{
-                button[i].frame = CGRect(x: (temp*90)-60, y: Int(Y2), width: 70,height: 60)
+                button[i].frame = CGRect(x: (temp*90)-50, y: Int(Y2), width: 60,height: 60)
                 temp+=1
             }
             button[i].backgroundColor = .black
-            button[i].setTitle("Test", for: .normal)
-            skillsView.addSubview(button[i])
-            print(i)
+            button[i].setTitle("-", for: .normal)
         }
-        skillsView.isHidden = false
+        //skillsView.isHidden = true
+        
+        //Items
+        temp = 1
+        for i in 0...button2.count-1 {
+            if i < 3 {
+                button2[i].frame = CGRect(x: ((i+1)*90)-50, y: Int(Y1), width: 60,height: 60)
+            }else{
+                button2[i].frame = CGRect(x: (temp*90)-50, y: Int(Y2), width: 60,height: 60)
+                temp+=1
+            }
+            button2[i].backgroundColor = .black
+            button2[i].setTitle("o", for: .normal)
+        }
+        //itemsView.isHidden = false
+        
+        // Labels Middle
+        for i in 0...label.count-1 {
+            label[i].frame = CGRect(x: 0, y: 0, width: 200, height:40)
+            label[i].center = CGPoint(x: screenWidth/2, y: screenHeight - (135))
+            label[i].textAlignment = .left
+            label[i].backgroundColor = .white
+            //Get Slime HP
+            label[i].text = " - "
+        }
+        
+        //Set up scene
+        let scene = GameScene(size:CGSize(width: 2048, height: 1536))
+        scene.scaleMode = .aspectFill
+        
+        let skView = self.view as! SKView
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        // skView.ignoresSiblingOrder = true
+        
+        skView.presentScene(scene)
+        
+        //DEFAULT VIEW
+        btnAttack.isUserInteractionEnabled = true
+        btnAttack.backgroundColor = .black
+        btnAttack.setTitle("Attack", for: .normal)
+        btnAttack.addTarget(self, action: #selector(btnActionAtk), for: .touchUpInside)
+
+        btnSkills.isUserInteractionEnabled = true
+        btnSkills.backgroundColor = .black
+        btnSkills.setTitle("Skills", for: .normal)
+        btnSkills.addTarget(self, action: #selector(btnActionSkills), for: .touchUpInside)
+        
+        btnItems.isUserInteractionEnabled = true
+        btnItems.backgroundColor = .black
+        btnItems.setTitle("Items", for: .normal)
+        btnItems.addTarget(self, action: #selector(btnActionItems), for: .touchUpInside)
+        
+        btnRun.isUserInteractionEnabled = true
+        btnRun.backgroundColor = .black
+        btnRun.setTitle("Run", for: .normal)
+        btnRun.addTarget(self, action: #selector(btnActionRun), for: .touchUpInside)
+
+        // *** Get View ids
+        gm.currentScene = scene
+        
+        bm.textBar = textDisplay
+
+        bm.actionsView = defaultView
+        bm.skillsView = skillsView
+        bm.itemsView = itemsView
+
     }
     
-    //Button Functions
     @objc func btnActionAtk(sender: UIButton!) {
-        print("Pressed")
+        print("Pressed Attack")
+        let gm = GameManager.Instance()
+        //gm.battleMngr.Interaction(action: .Fight)
+        gm.battleMngr.changeBattleState(.PlayerAct)
+        updateUI()
     }
     
     @objc func btnActionSkills(sender: UIButton!) {
-        print("Pressed")
+        print("Pressed Skills")
+        let gm = GameManager.Instance()
+        gm.battleMngr.Interaction(action: .Skills)
     }
     
     @objc func btnActionItems(sender: UIButton!) {
-        print("Pressed")
+        print("Pressed Items")
+        let gm = GameManager.Instance()
+        gm.battleMngr.Interaction(action: .Items)
     }
     
     @objc func btnActionRun(sender: UIButton!) {
-        print("Pressed")
+        print("Pressed Run")
+        let gm = GameManager.Instance()
+        gm.battleMngr.Interaction(action: .Run)
+    }
+    
+    func updateUI(){
+        let gm = GameManager.Instance()
+        statsDisplay.text = " Player HP: " + String(gm.battleMngr.player.HP) + "/" + String(gm.battleMngr.player.MaxHP)
+        //Get number of enemies and type of enemy
+//        for enemy in gm.battleMngr.enemiesList {
+//        label[1].text = " " + gm.battleMngr.enemiesList[0].battleName + " HP: " + String(enemy.HP)
+//        }
     }
     
 }
