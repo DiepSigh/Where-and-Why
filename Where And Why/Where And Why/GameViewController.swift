@@ -113,11 +113,11 @@ class GameViewController: UIViewController {
             //
             statusView.addSubview(lbl)
         }
-        
+        let test = GameManager.Instance()
         statsDisplay.center = CGPoint(x: screenWidth/2, y: screenHeight - 180)
         statsDisplay.textAlignment = .left
         //Get HP
-        statsDisplay.text = " Player HP: 5"
+        statsDisplay.text = " Player HP: "
         statsDisplay.backgroundColor = .white
         
         //Text Display at top
@@ -161,7 +161,7 @@ class GameViewController: UIViewController {
             label[i].textAlignment = .left
             label[i].backgroundColor = .white
             //Get Slime HP
-            label[i].text = " Slime HP: 5"
+            label[i].text = " - "
         }
         
         //Set up scene
@@ -210,7 +210,9 @@ class GameViewController: UIViewController {
     @objc func btnActionAtk(sender: UIButton!) {
         print("Pressed Attack")
         let gm = GameManager.Instance()
-        gm.battleMngr.Interaction(action: .Fight)
+        //gm.battleMngr.Interaction(action: .Fight)
+        gm.battleMngr.changeBattleState(.PlayerAct)
+        updateUI()
     }
     
     @objc func btnActionSkills(sender: UIButton!) {
@@ -229,6 +231,15 @@ class GameViewController: UIViewController {
         print("Pressed Run")
         let gm = GameManager.Instance()
         gm.battleMngr.Interaction(action: .Run)
+    }
+    
+    func updateUI(){
+        let gm = GameManager.Instance()
+        statsDisplay.text = " Player HP: " + String(gm.battleMngr.player.HP) + "/" + String(gm.battleMngr.player.MaxHP)
+        //Get number of enemies and type of enemy
+//        for enemy in gm.battleMngr.enemiesList {
+//        label[1].text = " " + gm.battleMngr.enemiesList[0].battleName + " HP: " + String(enemy.HP)
+//        }
     }
     
 }
