@@ -11,7 +11,6 @@ class GameScene: SKScene {
         background.anchorPoint = CGPoint.zero
         background.zPosition = -1
         addChild(background)
-        
 //        background.position = CGPoint.zero
         
         // GameManager.Instance().scene = self
