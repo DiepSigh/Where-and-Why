@@ -179,6 +179,7 @@ class Database {
         
         
         heroData?.LVL = 1
+        heroData?.Equip(what: .WaterSword)
         //
         heroData?.BHP = 10
         heroData?.BATK = 5
@@ -201,7 +202,7 @@ class Database {
         enemy = EnemyData(name: "Slime")
         enemy.MaxHP = 10
         enemy.ATK = 1
-        enemy.DEF = 5
+        enemy.DEF = 1
         enemy.LVL = 1
         enemy.EXPValue = 10
         enemy.enemyID = .Slime
