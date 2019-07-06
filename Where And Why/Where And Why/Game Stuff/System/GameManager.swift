@@ -17,7 +17,7 @@ class GameManager: SKSpriteNode {
     
     
     // var scene: SKScene?
-    var currentScene: SKScene?
+    var currentScene: GameScene?
     
     var playerData: PlayerData?
     var inventory: Inventory?
@@ -59,18 +59,32 @@ class GameManager: SKSpriteNode {
         print("GameManager: Initialization complete!")
     }
     
+    var playState: PlayStates = .None
+    enum PlayStates {
+        case None
+        case Battle
+        case World
+    }
     
+    
+    var didBattle: Bool = false
     func doUpdate(_ currentTime: TimeInterval) {
-        if (battleMngr.isActivated) {
-            battleMngr.doUpdate(currentTime)
+        if playState == .Battle {
+            if (battleMngr.isActivated) {
+                battleMngr.doUpdate(currentTime)
+            }
+            else {
+                if !didBattle {
+                    didBattle = true
+                    
+                    battleMngr.BeginBattle(encounter: .FourSlimes)
+                }
+            }
         }
-        else {
-            // battleMngr.BeginBattle(encounter: .FourSlimes)
-        }
-        
-        
-        if (worldMngr.isActivated) {
-            worldMngr.doUpdate(currentTime)
+        else if playState == .World {
+            if (worldMngr.isActivated) {
+                worldMngr.doUpdate(currentTime)
+            }
         }
     }
 

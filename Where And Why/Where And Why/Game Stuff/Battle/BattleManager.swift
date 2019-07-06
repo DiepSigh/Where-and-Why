@@ -123,7 +123,7 @@ class BattleManager {
     }
     
     
-    var controller: GameViewController!
+    var controller: BattleScene!
     
     
     var battleMessage: String = ""
@@ -155,6 +155,21 @@ class BattleManager {
     var selectSkill: Database.Skills = .None
     var selectItem: Database.ItemTypes = .None
     
+    
+    func BattlerTapped(who: BattlerNode) {
+        if who.isDead {
+            return
+        }
+        
+        if who == player {
+            // Interaction(action: .Fight)
+        }
+        else {
+            if canTargetEnemies {
+                Interaction(target: who)
+            }
+        }
+    }
     func Interaction(action: Actions) {
         if (selectState == .Actions) {
             selectAction = action
@@ -305,10 +320,12 @@ class BattleManager {
             // ??? <-- Animate this or something...
             
             if (Helper.Lapped(CGFloat(phaseTime), SEC)) {
+                /*
                 // ??? <-- DEBUGGING!!!
                 for enemy in enemiesList {
                     player.Attack(who: enemy)
                 }
+                 */
             }
             
             if (CGFloat(phaseTime) > SEC * 2) {
@@ -326,19 +343,20 @@ class BattleManager {
             // ??? <-- Animate this or something...
             
             
+            let enemyCount = enemiesList.count
             
-            
-            if (Helper.Lapped(CGFloat(phaseTime), SEC)) {
+            for n in 0...enemyCount-1 {
+                let enemy = enemiesList[n]
                 
-                // ??? <-- DEBUGGING!!!
-                for enemy in enemiesList {
+                if (Helper.Lapped(CGFloat(phaseTime), SEC * CGFloat(1+n))) {
                     if (!enemy.isDead) {
                         enemy.Attack(who: player)
                     }
                 }
             }
             
-            if (CGFloat(phaseTime) > SEC * 2) {
+            
+            if (CGFloat(phaseTime) > SEC * CGFloat(enemyCount+2)) {
                 changeBattleState(.CheckWinLose)
             }
             break
@@ -408,6 +426,13 @@ class BattleManager {
         default:
             fatalError("Missing phase in BattleManager: \(battleState)")
         }
+        
+        
+        
+        player.visualUpdate()
+        for enemy in enemiesList {
+            enemy.visualUpdate()
+        }
     }
     
     
@@ -438,10 +463,11 @@ class BattleManager {
             print("BattleManager: Gearing up the hero...")
             
             // *** Get the player battler ready!
-            player = gm.scene?.childNode(withName: "player") as? BattlerNode
+            player = gm.currentScene?.childNode(withName: "player") as? BattlerNode
             //
             if (player == nil) {
-                player = BattlerNode(imageNamed: "player")
+                fatalError("Could not find player node.")
+                // player = BattlerNode(imageNamed: "player")
             }
             //
             player.Setup(what: gm.playerData!)
@@ -451,10 +477,11 @@ class BattleManager {
             // *** Prepare the list of enemies and get THEM ready!
             enemiesList.removeAll()
             for enemyType in db.allEncounters[self.encounterID]! {
-                var battler: BattlerNode? = gm.scene?.childNode(withName: "enemy\(1+enemiesList.count)") as? BattlerNode
+                var battler: BattlerNode? = gm.currentScene?.childNode(withName: "enemy\(1+enemiesList.count)") as? BattlerNode
                 //
                 if (battler == nil) {
-                    battler = BattlerNode(imageNamed: "enemy\(1+enemiesList.count)")
+                    fatalError("Could not find enemy\(1+enemiesList.count) node.")
+                    // battler = BattlerNode(imageNamed: "enemy\(1+enemiesList.count)")
                 }
                 //
                 battler?.Setup(what: enemyType)
@@ -485,6 +512,8 @@ class BattleManager {
             break
         case .PlayerAct:
             PerformAction(who: player, action: selectAction, target: selectBattler, skill: selectSkill, item: selectItem)
+            //
+            changeSelectState(.None)
             break
         case .EnemyTurn:
             Message("Enemies' Turns")
@@ -547,6 +576,19 @@ class BattleManager {
         self.selectState = state
     }
     func updateSelectState(from: SelectStates, to: SelectStates) {
+        
+        let gm: GameManager = GameManager.Instance()
+        
+        if !enemiesList.isEmpty {
+            for n in 0...enemiesList.count-1 {
+                let enemy = enemiesList[n]
+                if enemy.actPointer != nil {
+                    enemy.actPointer.isHidden = true
+                }
+            }
+        }
+        
+        
         switch to {
         case .None:
             // *** Initialize our selections
@@ -583,6 +625,28 @@ class BattleManager {
             messageView.isHidden = true
             statusView.isHidden = true
             canTargetEnemies = true
+            
+            for n in 0...enemiesList.count-1 {
+                let enemy = enemiesList[n]
+                if enemy.isDead {
+                    continue
+                }
+                
+                if enemy.actPointer == nil {
+                    var img: SKSpriteNode = SKSpriteNode(imageNamed: "cursor")
+                    
+                    img.position.x = enemy.position.x + 80
+                    img.position.y = enemy.position.y
+                    // img.zPosition = -100
+                    img.size = CGSize(width: 96, height: 96)
+                    
+                    enemy.actPointer = img
+                    gm.currentScene?.addChild(img)
+                }
+                else {
+                    enemy.actPointer.isHidden = false
+                }
+            }
             break
         case .Skills:
             actionsView.isHidden = false

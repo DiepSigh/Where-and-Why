@@ -22,7 +22,6 @@ enum Elements: Int {
 }
 
 
-
 class BattlerNode: SKSpriteNode {
     
     var battleName = ""
@@ -47,6 +46,10 @@ class BattlerNode: SKSpriteNode {
     
     
     
+    
+    var actPointer: SKSpriteNode!
+    
+    
     func Setup(what: Database.EnemyTypes) {
         let ed: EnemyData = Database.Instance().allEnemies[what]!
         
@@ -65,6 +68,26 @@ class BattlerNode: SKSpriteNode {
         // *** Enemies start at max strength
         self.HP = self.MaxHP
         self.element = Elements(rawValue: Int.random(in: 0...2))! // *** Random number between 0 and 2
+        
+        self.colorBlendFactor = 1.0
+        if self.element == .Fire {
+            self.color = UIColor.red
+            
+            self.battleName = "\(self.battleName) (Fire)"
+        }
+        else if self.element == .Wind {
+            self.color = UIColor.yellow
+            
+            self.battleName = "\(self.battleName) (Wind)"
+        }
+        else if self.element == .Water {
+            self.color = UIColor.blue
+            
+            self.battleName = "\(self.battleName) (Water)"
+        }
+        else {
+            self.color = UIColor.white
+        }
     }
     func Setup(what: PlayerData) {
         
@@ -215,5 +238,28 @@ class BattlerNode: SKSpriteNode {
     }
     
     
+    
+    var timeVal: CGFloat = 0
+    func visualUpdate() {
+        timeVal += 1
+        
+        
+        if actPointer != nil {
+            actPointer.color = UIColor.init(hue: (1.0 * (timeVal/100)).truncatingRemainder(dividingBy: 1.0), saturation: 0.7, brightness: 0.7, alpha: 1)
+            actPointer.colorBlendFactor = 1.0
+        }
+        
+        
+        if isDead {
+            self.alpha = Helper.Max(0, self.alpha - 2.5/Helper.SECOND)
+        }
+    }
+    
+    func doTapped() {
+        print("Tapped received by \(battleName)")
+        
+        let bm: BattleManager = GameManager.Instance().battleMngr
+        bm.BattlerTapped(who: self)
+    }
 }
 
