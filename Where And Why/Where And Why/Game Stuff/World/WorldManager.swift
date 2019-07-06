@@ -27,14 +27,17 @@ class WorldManager {
     func doUpdate(_ currentTime: TimeInterval) {
         if (player != nil) {
             player.doUpdate(currentTime)
-            
-            print("???")
         }
     }
     
     
+    
     func Room_Start() {
         let gm = GameManager.Instance()
+        
+        
+        rg.tilemap = gm.currentScene?.childNode(withName: "worldgrid") as? SKTileMapNode
+        rg.solidmap = gm.currentScene?.childNode(withName: "solidgrid") as? SKTileMapNode
         
         
         rg.Reconstruct(Int((gm.currentScene?.size.width)! / CGFloat(Roomgrid.GRIDSNAP)), Int((gm.currentScene?.size.height)! / CGFloat(Roomgrid.GRIDSNAP)))

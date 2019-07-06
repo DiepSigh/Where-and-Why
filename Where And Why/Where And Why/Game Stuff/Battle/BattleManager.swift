@@ -74,11 +74,11 @@ class BattleManager {
     var encounterID: Database.EncounterTypes
     
     
-    var actionsView: SKView!
-    var skillsView: SKView!
-    var itemsView: SKView!
-    var messageView: SKView!
-    var statusView: SKView!
+    var actionsView: UIView!
+    var skillsView: UIView!
+    var itemsView: UIView!
+    var messageView: UIView!
+    var statusView: UIView!
     var canTargetEnemies: Bool = false
     
     var textBar: UILabel!
@@ -571,7 +571,7 @@ class BattleManager {
             canTargetEnemies = false
             break
         case .Enemies:
-            actionsView.isHidden = true
+            actionsView.isHidden = false
             skillsView.isHidden = true
             itemsView.isHidden = true
             messageView.isHidden = true
@@ -579,7 +579,7 @@ class BattleManager {
             canTargetEnemies = true
             break
         case .Skills:
-            actionsView.isHidden = true
+            actionsView.isHidden = false
             skillsView.isHidden = false
             itemsView.isHidden = true
             messageView.isHidden = true
@@ -587,7 +587,7 @@ class BattleManager {
             canTargetEnemies = false
             break
         case .Items:
-            actionsView.isHidden = true
+            actionsView.isHidden = false
             skillsView.isHidden = true
             itemsView.isHidden = false
             messageView.isHidden = true

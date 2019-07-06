@@ -20,15 +20,19 @@ class WorldPlayer: WorldActor {
             /*
             Move(gridx: Int(Inputter.tapLocation.x / CGFloat(Roomgrid.GRIDSNAP)), gridy: Int(Inputter.tapLocation.y / CGFloat(Roomgrid.GRIDSNAP)))
  */
-            ClickTowards(Helper.Sign(Inputter.tapLocation.x - self.position.x), Helper.Sign(Inputter.tapLocation.y - self.position.y))
+            
+            var tapx = floor(Inputter.tapLocation.x / CGFloat(Roomgrid.GRIDSNAP)) - CGFloat(self.gx)
+            var tapy = floor(Inputter.tapLocation.y / CGFloat(Roomgrid.GRIDSNAP)) - CGFloat(self.gy)
+            //
+            let largest = Helper.Abs(Helper.Max(tapx,tapy))
+            tapx = round(tapx / largest)
+            tapy = round(tapy / largest)
+            //
+            ClickTowards(Helper.Sign(tapx), Helper.Sign(tapy))
         }
         
         
         super.doUpdate(currentTime)
-        
-        
-        print("Player: \(self.gx)/\(self.gy)")
-        print("Player: \(self.position.x)/\(self.position.y)")
     }
     
     

@@ -23,7 +23,7 @@ enum GridSpots {
 
 class Roomgrid {
     
-    static let GRIDSNAP: Int = 64
+    static let GRIDSNAP: Int = 128
     private var roomdata: Grid<GridSpots> = Grid(1, 1, .Empty)
     
     
@@ -32,26 +32,38 @@ class Roomgrid {
     }
     
     
+    
+    var tilemap: SKTileMapNode!
+    var solidmap: SKTileMapNode!
+    
     func Reconstruct(_ rows: Int, _ cols: Int, _ def: GridSpots = .Empty) {
         roomdata = Grid(rows, cols, def)
-    }
-    
-    // *** Copy the data from an existing grid.
-    func ReadMap(what: Grid<GridSpots>) {
-        Reconstruct(what.rows, what.columns, .Empty)
         //
-        for xx in 0...what.rows {
-            for yy in 0...what.columns {
-                SetSpot(xx, yy, what[xx,yy])
-            }
+        if solidmap != nil {
+            ReadMap(solidmap)
         }
     }
-    func SetSpot(_ xx: Int, _ yy: Int, _ what: GridSpots) {
-        roomdata[xx,yy] = what
+    
+    // *** Sets up the grid with a tile map
+    func ReadMap(_ map: SKTileMapNode) {
+        for xx in 0...roomdata.rows-1 {
+            for yy in 0...roomdata.columns-1 {
+                roomdata[xx,yy] = (map.tileDefinition(atColumn: xx, row: yy) == nil) ? .Empty : .Full
+            }
+        }
     }
     
     
     func Check(_ xx: Int, _ yy: Int) -> GridSpots {
+        /*
+        if solidmap.tileDefinition(atColumn: xx, row: yy) == nil {
+            return .Empty
+        }
+        else {
+            return .Full
+        }
+ */
+        
         return roomdata[xx,yy]
     }
     

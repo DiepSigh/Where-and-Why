@@ -23,8 +23,22 @@ class WorldActor: SKSpriteNode {
     var clickx: Int = 0
     var clicky: Int = 0
     
+    var rg: Roomgrid {
+        get {
+            return GameManager.Instance().worldMngr.rg
+        }
+    }
+    
  
-    func ClickTowards(_ xx: Int, _ yy: Int, rate: CGFloat = 3/Helper.SECOND) {
+    func ClickTowards(_ xx: Int, _ yy: Int, rate: CGFloat = 12/Helper.SECOND) {
+        // *** Can we step there?
+        /*
+        if (!rg.CanTravel(fxx: self.gx, fyy: self.gy, txx: xx, tyy: yy)) {
+            return
+        }
+ */
+        
+        
         if (!isClicking) {
             isClicking = true
             
