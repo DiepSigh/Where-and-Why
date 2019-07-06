@@ -65,7 +65,7 @@ class GameManager: SKSpriteNode {
             battleMngr.doUpdate(currentTime)
         }
         else {
-            // battleMngr.BeginBattle(encounter: .OneSlime)
+            // battleMngr.BeginBattle(encounter: .FourSlimes)
         }
         
         
@@ -73,11 +73,7 @@ class GameManager: SKSpriteNode {
             worldMngr.doUpdate(currentTime)
         }
     }
-    
-    
-    
-    
-    
+
     
     
     

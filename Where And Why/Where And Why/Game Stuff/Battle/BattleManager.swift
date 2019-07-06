@@ -123,6 +123,7 @@ class BattleManager {
     }
     
     
+    var controller: GameViewController!
     
     
     var battleMessage: String = ""
@@ -294,11 +295,11 @@ class BattleManager {
             
             
             // ??? <-- Placeholder code!
-            if (Inputter.wasTapped) {
-                changeSelectState(.None)
-                
-                changeBattleState(.PlayerAct)
-            }
+//            if (Inputter.wasTapped) {
+//                changeSelectState(.None)
+//
+//                changeBattleState(.PlayerAct)
+//            }
             break
         case .PlayerAct:
             // ??? <-- Animate this or something...
@@ -522,6 +523,11 @@ class BattleManager {
             
         default:
             break
+        }
+        
+        
+        if player != nil {
+            controller.updateUI()
         }
     }
     // ---------------------------------------------------------
