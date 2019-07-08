@@ -108,6 +108,10 @@ class BattleManager {
         //
         //
         self.encounterID = encounter
+        
+        
+        
+        GameManager.Instance().currentScene?.transitionToScene(level: "GameScene")
         //
         //
         changeBattleState(.Init)
@@ -118,8 +122,17 @@ class BattleManager {
     }
     func EndBattle() {
         isActivated = false
+        
+        
+        // *** Transfer battle results to world mode and next battle
+        let gm = GameManager.Instance()
+        gm.playerData?.HP = player.HP
+        
+        
+        
+        BattleView.UnloadAll()
         //
-        // ??? <-- Reactivate the WorldManager... Or kill the game...?
+        GameManager.Instance().currentScene?.transitionToScene(level: "World_Test")
     }
     
     
@@ -157,7 +170,7 @@ class BattleManager {
     
     
     func BattlerTapped(who: BattlerNode) {
-        if who.isDead {
+        if !who.isTargettable {
             return
         }
         
@@ -255,8 +268,10 @@ class BattleManager {
     
     
     func doUpdate(_ currentTime: TimeInterval) {
+        let gm = GameManager.Instance()
+        
         // *** Initialize right away if its necessary-- Don't even wait.
-        if (battleState == .Init) {
+        if (battleState == .Init && gm.playState == .Battle) {
             print("BattleManager: Everything looks ready. Let's start!")
             
             changeBattleState(.Start)
@@ -284,23 +299,19 @@ class BattleManager {
             
             var enemyRolecall: [CGFloat] = []
             for n in 0...enemiesList.count-1 {
-                enemyRolecall.append(Helper.BlendTowards(t, SEC * 3 + SEC * CGFloat(n), SEC * 1))
+                enemyRolecall.append(SEC * 3 + SEC * CGFloat(n))
             }
             
             
             for n in 0...enemyRolecall.count-1 {
-                // ??? <-- Not yet optimized
-                if (n == 0) {
-                    Message("A \(enemiesList[n].battleName) has appeared!", SEC)
-                }
-                else if (enemyRolecall[n-1] >= 1 && enemyRolecall[n] < 1) {
+                if Helper.Lapped(t, enemyRolecall[n]) {
                     Message("A \(enemiesList[n].battleName) has appeared!", SEC)
                 }
             }
             
             
             
-            if (enemyRolecall.last! >= CGFloat(1)) {
+            if (t >= enemyRolecall.last! + 1) {
                 changeBattleState(.PlayerTurn)
             }
             break
@@ -471,6 +482,8 @@ class BattleManager {
             }
             //
             player.Setup(what: gm.playerData!)
+            //
+            player.present = true
             
             
             print("BattleManager: Sharpening the monsters' fangs...")
@@ -487,6 +500,7 @@ class BattleManager {
                 battler?.Setup(what: enemyType)
                 //
                 enemiesList.append(battler!)
+                battler?.present = true
             }
             
             
@@ -536,6 +550,10 @@ class BattleManager {
             Message("Defeated...")
             break
         case .Rewards:
+            // ??? <-- Just for fun.
+            gm.playerData?.LevelUp()
+            
+            
             Message("Gained X EXP!", Helper.SECOND * 2)
             Message("Earned X Gold!", Helper.SECOND * 2)
             Message("Found X!", Helper.SECOND * 2)
@@ -628,7 +646,7 @@ class BattleManager {
             
             for n in 0...enemiesList.count-1 {
                 let enemy = enemiesList[n]
-                if enemy.isDead {
+                if !enemy.isTargettable {
                     continue
                 }
                 

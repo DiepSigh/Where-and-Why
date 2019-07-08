@@ -38,8 +38,7 @@ class WorldManager {
         
         rg.tilemap = gm.currentScene?.childNode(withName: "worldgrid") as? SKTileMapNode
         rg.solidmap = gm.currentScene?.childNode(withName: "solidgrid") as? SKTileMapNode
-        
-        
+        //
         rg.Reconstruct(Int((gm.currentScene?.size.width)! / CGFloat(Roomgrid.GRIDSNAP)), Int((gm.currentScene?.size.height)! / CGFloat(Roomgrid.GRIDSNAP)))
         
         
@@ -49,5 +48,27 @@ class WorldManager {
         
         
         player.PlaceOntoGrid()
+    }
+    
+    
+    
+    func didStepTaken(_ who: WorldActor) {
+        if who == player {
+            if who.stepsTaken >= 40 {
+                switch Int.random(in: 0...2) {
+                case 0:
+                    GameManager.Instance().battleMngr.BeginBattle(encounter: .OneSlime)
+                case 1:
+                    GameManager.Instance().battleMngr.BeginBattle(encounter: .TwoSlimes)
+                case 2:
+                    GameManager.Instance().battleMngr.BeginBattle(encounter: .FourSlimes)
+                    break
+                    
+                default:
+                    // *** Do nothing.
+                    break
+                }
+            }
+        }
     }
 }

@@ -55,14 +55,12 @@ class Roomgrid {
     
     
     func Check(_ xx: Int, _ yy: Int) -> GridSpots {
-        /*
-        if solidmap.tileDefinition(atColumn: xx, row: yy) == nil {
-            return .Empty
-        }
-        else {
+        if xx < 0 || yy < 0 {
             return .Full
         }
- */
+        else if xx >= roomdata.rows || yy >= roomdata.columns {
+            return .Full
+        }
         
         return roomdata[xx,yy]
     }

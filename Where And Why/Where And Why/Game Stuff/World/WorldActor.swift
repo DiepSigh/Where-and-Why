@@ -14,6 +14,8 @@ import SpriteKit
 class WorldActor: SKSpriteNode {
     
     
+    var stepsTaken: Int = 0
+    
     var gx: Int = 0
     var gy: Int = 0
     
@@ -32,11 +34,9 @@ class WorldActor: SKSpriteNode {
  
     func ClickTowards(_ xx: Int, _ yy: Int, rate: CGFloat = 12/Helper.SECOND) {
         // *** Can we step there?
-        /*
-        if (!rg.CanTravel(fxx: self.gx, fyy: self.gy, txx: xx, tyy: yy)) {
+        if (!rg.CanTravel(fxx: self.gx, fyy: self.gy, txx: self.gx+xx, tyy: self.gy+yy)) {
             return
         }
- */
         
         
         if (!isClicking) {
@@ -73,6 +73,11 @@ class WorldActor: SKSpriteNode {
                 MoveTowards(clickx, clicky)
                 //
                 isClicking = false
+                
+                
+                stepsTaken += 1
+                //
+                GameManager.Instance().worldMngr?.didStepTaken(self)
             }
         }
         else {

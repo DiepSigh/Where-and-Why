@@ -36,6 +36,7 @@ class BattlerNode: SKSpriteNode {
     
     
     var isDead = false
+    var present = false
     
     
     var element: Elements = .Light
@@ -88,6 +89,9 @@ class BattlerNode: SKSpriteNode {
         else {
             self.color = UIColor.white
         }
+        
+        
+        Initialize()
     }
     func Setup(what: PlayerData) {
         
@@ -107,7 +111,21 @@ class BattlerNode: SKSpriteNode {
         //
         // *** Your element is whatever weapon you're holding!
         self.element = Database.Instance().allItems[self.weapon]!.element
+        
+        
+        Initialize()
     }
+    
+    
+    func Initialize() {
+    }
+    
+    var isTargettable: Bool {
+        get {
+            return present && !isDead
+        }
+    }
+    
     
     
     
@@ -243,15 +261,22 @@ class BattlerNode: SKSpriteNode {
     func visualUpdate() {
         timeVal += 1
         
-        
-        if actPointer != nil {
-            actPointer.color = UIColor.init(hue: (1.0 * (timeVal/100)).truncatingRemainder(dividingBy: 1.0), saturation: 0.7, brightness: 0.7, alpha: 1)
-            actPointer.colorBlendFactor = 1.0
+        if present {
+            if actPointer != nil {
+                actPointer.color = UIColor.init(hue: (1.0 * (timeVal/100)).truncatingRemainder(dividingBy: 1.0), saturation: 0.7, brightness: 0.7, alpha: 1)
+                actPointer.colorBlendFactor = 1.0
+            }
+            
+            
+            if isDead {
+                self.alpha = Helper.Max(0, self.alpha - 2.5/Helper.SECOND)
+            }
+            else {
+                self.alpha = 1
+            }
         }
-        
-        
-        if isDead {
-            self.alpha = Helper.Max(0, self.alpha - 2.5/Helper.SECOND)
+        else {
+            self.alpha = 0
         }
     }
     

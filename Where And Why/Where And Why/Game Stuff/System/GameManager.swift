@@ -73,13 +73,6 @@ class GameManager: SKSpriteNode {
             if (battleMngr.isActivated) {
                 battleMngr.doUpdate(currentTime)
             }
-            else {
-                if !didBattle {
-                    didBattle = true
-                    
-                    battleMngr.BeginBattle(encounter: .FourSlimes)
-                }
-            }
         }
         else if playState == .World {
             if (worldMngr.isActivated) {

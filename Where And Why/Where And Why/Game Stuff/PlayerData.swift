@@ -47,8 +47,11 @@ class PlayerData: ActorData {
         //
         self.EXP = 0
         self.nextEXP = 10 * self.LVL
-        //
+        
+        
         CalculateStats()
+        //
+        self.HP = self.MaxHP
     }
     
     func CalculateStats() {

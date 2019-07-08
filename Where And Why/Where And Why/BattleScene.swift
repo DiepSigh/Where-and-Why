@@ -22,10 +22,15 @@ class BattleScene: GameScene {
         
         
         let player = BattlerNode(imageNamed: "player_01")
+        player.alpha = 0
         let enemy1 = BattlerNode(imageNamed: "monster_05")
+        enemy1.alpha = 0
         let enemy2 = BattlerNode(imageNamed: "monster_06")
+        enemy2.alpha = 0
         let enemy3 = BattlerNode(imageNamed: "monster_05")
+        enemy3.alpha = 0
         let enemy4 = BattlerNode(imageNamed: "monster_06")
+        enemy4.alpha = 0
         
         
         backgroundColor = SKColor.black
@@ -160,12 +165,12 @@ class BattleScene: GameScene {
         let btnAttack = UIButton(frame: CGRect(x: X1, y: Y1, width: 100, height: 60))
         
         let gameView = self.view as! SKView
-        let messageView = BattleView()
-        let statusView = BattleView()
+        let messageView = BattleView().register()
+        let statusView = BattleView().register()
         //      defaultView.frame = CGRect(x:0,y:0, width:self.view.frame.size.width,                 height:self.view.frame.size.height)
-        let defaultView = BattleView(frame: CGRect(x: screenWidth - 300, y: screenHeight - 160, width: 140+100, height: 80+60))
-        let skillsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140))
-        let itemsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140))
+        let defaultView = BattleView(frame: CGRect(x: screenWidth - 300, y: screenHeight - 160, width: 140+100, height: 80+60)).register()
+        let skillsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140)).register()
+        let itemsView = BattleView(frame: CGRect(x: 40, y: screenHeight - 160, width: 240, height: 140)).register()
         //
         gameView.addSubview(messageView)
         gameView.addSubview(statusView)
